@@ -11,7 +11,7 @@ int run(char* imageDir){
     }
 
     // create detector, and load engine plan
-    std::string trtFile = "./yolov8s.plan";
+    std::string trtFile = "./yolov8s.trt";
     YoloDetector detector(trtFile);
 
     // inference
@@ -31,7 +31,7 @@ int run(char* imageDir){
         // draw result on image
         YoloDetector::draw_image(img, res);
 
-        cv::imwrite("_" + file_names[i], img);
+        cv::imwrite("../output/_" + file_names[i], img);
 
         // std::cout << "Image: " << file_names[i] << " done." << std::endl;
     }
