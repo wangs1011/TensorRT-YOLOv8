@@ -2,6 +2,7 @@
 #include <string>
 #include "infer.h"
 #include "BYTETracker.h"
+#include <opencv2/core/utils/logger.hpp>
 
 
 // 需要跟踪的类别，可以根据自己需求调整，筛选自己想要跟踪的对象的种类（以下对应COCO数据集类别索引）
@@ -19,8 +20,18 @@ bool isTrackingClass(int class_id){
 int run(char* videoPath){
     // read video
     std::string inputVideoPath = std::string(videoPath);
+
+    cv::utils::logging::setLogLevel(cv::utils::logging::LOG_LEVEL_DEBUG);
+
+
     cv::VideoCapture cap(inputVideoPath);
-    if ( !cap.isOpened() ) return 0;
+
+    std::cout << "Backend: " << cap.getBackendName() << std::endl;
+
+    if (!cap.isOpened()) {
+        std::cerr << "Error: 视频无法打开" << std::endl;
+        return -1;
+    }
 
     int img_w = cap.get(CAP_PROP_FRAME_WIDTH);
 	int img_h = cap.get(CAP_PROP_FRAME_HEIGHT);
@@ -28,14 +39,14 @@ int run(char* videoPath){
     long nFrame = static_cast<long>(cap.get(CAP_PROP_FRAME_COUNT));
     cout << "Total frames: " << nFrame << endl;
 
-    cv::VideoWriter writer("result.mp4", VideoWriter::fourcc('m', 'p', '4', 'v'), fps, Size(img_w, img_h));
+    cv::VideoWriter writer("./result.mp4", VideoWriter::fourcc('m', 'p', '4', 'v'), fps, Size(img_w, img_h));
 
     // YOLOv8 predictor
-    std::string trtFile = "../detect/build/yolov8s.plan";
+    std::string trtFile = "../detect/weights/yolov8s.plan";
     YoloDetector detector(trtFile, 0, 0.45, 0.01);
-
     // ByteTrack tracker
     BYTETracker tracker(fps, 30);
+    std::cout << "Succeeded loading plan model!" << std::endl;
 
     cv::Mat img;
     int num_frames = 0;
@@ -90,9 +101,9 @@ int run(char* videoPath){
                 cv::Point(0, 30), 0, 0.6, cv::Scalar(0, 0, 255), 2, cv::LINE_AA);
         writer.write(img);
 
-        // cv::imshow("img", img);
-        // char c = waitKey(1);
-        // if (c > 0) break;
+//         cv::imshow("img", img);
+//         char c = waitKey(1);
+//         if (c > 0) break;
     }
 
     cap.release();

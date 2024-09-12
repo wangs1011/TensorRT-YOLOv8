@@ -2,45 +2,52 @@ cmake_minimum_required(VERSION 3.10)
 
 project(yolov8_bytetrack)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fPIC -O3 -std=c++11 -fopenmp")
 add_definitions(-std=c++11)
 add_definitions(-DAPI_EXPORTS)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_BUILD_TYPE release)
 
-include_directories("/usr/include/eigen3")
+include_directories("/usr/local/eigen3")
 
 # include and link dirs of cuda and tensorrt, you need adapt them if yours are different
 # ============= cuda ============
 find_package(CUDA REQUIRED)
-include_directories(/usr/local/cuda/include)
-link_directories(/usr/local/cuda/lib64)
+message(STATUS "Find CUDA include at ${CUDA_INCLUDE_DIRS}")
+message(STATUS "Find CUDA libraries: ${CUDA_LIBRARIES}")
 
-# ============= tensorrt ============
-if (CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
-  message("Embed_platform on")
-  include_directories(/usr/include/aarch64-linux-gnu)
-  link_directories(/usr/lib/aarch64-linux-gnu)
-else()
-  message("Embed_platform off")
-  include_directories(/usr/include/x86_64-linux-gnu)
-  link_directories(/usr/lib/x86_64-linux-gnu)
-endif()
+# TensorRT
+set(TENSORRT_ROOT /usr/local/TensorRT-8.5.1.7)
+find_path(TENSORRT_INCLUDE_DIR NvInfer.h
+        HINTS ${TENSORRT_ROOT} PATH_SUFFIXES include/)
+message(STATUS "Found TensorRT headers at ${TENSORRT_INCLUDE_DIR}")
+find_library(TENSORRT_LIBRARY_INFER nvinfer
+        HINTS ${TENSORRT_ROOT} ${TENSORRT_BUILD} ${CUDA_TOOLKIT_ROOT_DIR}
+        PATH_SUFFIXES lib lib64 lib/x64)
+find_library(TENSORRT_LIBRARY_ONNXPARSER nvonnxparser
+        HINTS  ${TENSORRT_ROOT} ${TENSORRT_BUILD} ${CUDA_TOOLKIT_ROOT_DIR}
+        PATH_SUFFIXES lib lib64 lib/x64)
+set(TENSORRT_LIBRARY ${TENSORRT_LIBRARY_INFER} ${TENSORRT_LIBRARY_ONNXPARSER})
+message(STATUS "Find TensorRT libs: ${TENSORRT_LIBRARY}")
 
-# ============ opencv ============
+# OpenCV
 find_package(OpenCV)
-include_directories(${OpenCV_INCLUDE_DIRS})
+message(STATUS "Find OpenCV include at ${OpenCV_INCLUDE_DIRS}")
+message(STATUS "Find OpenCV libraries: ${OpenCV_LIBRARIES}")
+
+
 
 # =========== bytetrack lib ===========
-include_directories(${PROJECT_SOURCE_DIR}/bytetrack/include)
+include_directories(${PROJECT_SOURCE_DIR}/bytetrack/include ${CUDA_INCLUDE_DIRS} ${TENSORRT_INCLUDE_DIR} ${OpenCV_INCLUDE_DIRS})
 file(GLOB_RECURSE SRCS01 ${PROJECT_SOURCE_DIR}/bytetrack/src/*.cpp)
 add_library(bytetrack SHARED ${SRCS01})
-target_link_libraries(bytetrack cudart nvinfer ${OpenCV_LIBS})
+target_link_libraries(bytetrack ${OpenCV_LIBRARIES} ${CUDA_LIBRARIES} ${TENSORRT_LIBRARY})
 
 # ============= yolov8 lib =============
-include_directories(${PROJECT_SOURCE_DIR}/detect/include)
+include_directories(${PROJECT_SOURCE_DIR}/detect/include ${CUDA_INCLUDE_DIRS} ${TENSORRT_INCLUDE_DIR} ${OpenCV_INCLUDE_DIRS})
 file(GLOB_RECURSE SRCS02 ${PROJECT_SOURCE_DIR}/detect/src/*.cpp ${PROJECT_SOURCE_DIR}/detect/src/*.cu)
 cuda_add_library(yolo_infer SHARED ${SRCS02})
-target_link_libraries(yolo_infer nvinfer cudart nvonnxparser ${OpenCV_LIBS})
+target_link_libraries(yolo_infer ${OpenCV_LIBRARIES} ${CUDA_LIBRARIES} ${TENSORRT_LIBRARY})
 
 # ======== main execute file ========
 add_executable(main ${PROJECT_SOURCE_DIR}/main.cpp)
