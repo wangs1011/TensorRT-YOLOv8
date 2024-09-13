@@ -26,8 +26,6 @@ int run(char* videoPath){
 
     cv::VideoCapture cap(inputVideoPath);
 
-    std::cout << "Backend: " << cap.getBackendName() << std::endl;
-
     if (!cap.isOpened()) {
         std::cerr << "Error: 视频无法打开" << std::endl;
         return -1;

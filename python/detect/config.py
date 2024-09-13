@@ -9,7 +9,7 @@ kConfThresh = 0.25
 kMaxNumOutputBbox = 1000  # assume the box outputs no more than kMaxNumOutputBbox boxes that conf >= kNmsThresh;
 kNumBoxElement = 7  # left, top, right, bottom, confidence, class, keep_flag(whether drop when NMS)
 
-onnx_file = "./onnx_model/yolov8s.onnx"
+onnx_file = "/home/ods/wshuo_test/TensorRT-YOLOv8/C++/detect/onnx_model/yolov8s.onnx"
 trt_file = "./model.plan"
 
 # for FP16 mode

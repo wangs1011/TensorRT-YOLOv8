@@ -14,7 +14,7 @@ const float kConfThresh = 0.25f;
 const int kMaxNumOutputBbox = 1000;  // assume the box outputs no more than kMaxNumOutputBbox boxes that conf >= kNmsThresh;
 const int kNumBoxElement = 7;  // left, top, right, bottom, confidence, class, keepflag(whether drop when NMS)
 
-const std::string onnxFile = "../onnx_model/yolov8s.onnx";
+const std::string onnxFile = "/home/ods/wshuo_test/TensorRT-YOLOv8/C++/detect/onnx_model/yolov8s.onnx";
 // const std::string trtFile = "./yolov8s.plan";
 // const std::string testDataDir = "../images";  // 用于推理
 

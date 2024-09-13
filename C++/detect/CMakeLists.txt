@@ -29,6 +29,7 @@ set(TENSORRT_LIBRARY ${TENSORRT_LIBRARY_INFER} ${TENSORRT_LIBRARY_ONNXPARSER})
 message(STATUS "Find TensorRT libs: ${TENSORRT_LIBRARY}")
 
 # OpenCV
+set(OpenCV_DIR /home/clib/opencv-3.4.0/build/)
 find_package(OpenCV REQUIRED)
 message(STATUS "Find OpenCV include at ${OpenCV_INCLUDE_DIRS}")
 message(STATUS "Find OpenCV libraries: ${OpenCV_LIBRARIES}")
