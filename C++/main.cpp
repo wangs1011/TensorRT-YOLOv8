@@ -40,7 +40,7 @@ int run(char* videoPath){
     cv::VideoWriter writer("./result.mp4", VideoWriter::fourcc('m', 'p', '4', 'v'), fps, Size(img_w, img_h));
 
     // YOLOv8 predictor
-    std::string trtFile = "../detect/weights/yolov8s.plan";
+    std::string trtFile = "../detect/weights/yolov8s.trt";
     YoloDetector detector(trtFile, 0, 0.45, 0.01);
     // ByteTrack tracker
     BYTETracker tracker(fps, 30);
