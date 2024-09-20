@@ -11,7 +11,7 @@ int run(char* imageDir){
     }
 
     // create detector, and load engine plan
-    std::string trtFile = "../weights/yolov8s.plan";
+    std::string trtFile = "../weights/yolov8s.trt";
     YoloDetector detector(trtFile);
 
     // inference
