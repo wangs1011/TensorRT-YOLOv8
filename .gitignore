@@ -31,4 +31,7 @@
 *.out
 *.app
 .idea
+*.xml
+*.log
+*.pt
 
