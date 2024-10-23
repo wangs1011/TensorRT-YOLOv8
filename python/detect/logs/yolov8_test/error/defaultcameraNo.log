@@ -1,0 +1,46 @@
+2024-09-29 11:27:05,253 ERROR 'YoloV8' object has no attribute 'half'
+Traceback (most recent call last):
+  File "/Users/wshuo/code/wshuo_workspace/TensorRT-YOLOv8/python/detect/yolov8_test.py", line 123, in detect
+    detect_res = yolov8.image_detect(img)  # lists [[x,y,x,y,score,classes]]
+  File "/Users/wshuo/anaconda3/envs/yolov8/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/Users/wshuo/code/wshuo_workspace/TensorRT-YOLOv8/python/detect/yolov8_test.py", line 61, in image_detect
+    im = im.half() if self.half else im.float()  # uint8 to fp16/32
+AttributeError: 'YoloV8' object has no attribute 'half'
+2024-09-29 11:28:16,809 ERROR result type Float can't be cast to the desired output type Byte
+Traceback (most recent call last):
+  File "/Users/wshuo/code/wshuo_workspace/TensorRT-YOLOv8/python/detect/yolov8_test.py", line 123, in detect
+    detect_res = yolov8.image_detect(img)  # lists [[x,y,x,y,score,classes]]
+  File "/Users/wshuo/anaconda3/envs/yolov8/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/Users/wshuo/code/wshuo_workspace/TensorRT-YOLOv8/python/detect/yolov8_test.py", line 62, in image_detect
+    im /= 255  # 0 - 255 to 0.0 - 1.0
+RuntimeError: result type Float can't be cast to the desired output type Byte
+2024-09-29 11:32:12,076 ERROR 'list' object has no attribute 'shape'
+Traceback (most recent call last):
+  File "/Users/wshuo/code/wshuo_workspace/TensorRT-YOLOv8/python/detect/yolov8_test.py", line 123, in detect
+    detect_res = yolov8.image_detect(img)  # lists [[x,y,x,y,score,classes]]
+  File "/Users/wshuo/anaconda3/envs/yolov8/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/Users/wshuo/code/wshuo_workspace/TensorRT-YOLOv8/python/detect/yolov8_test.py", line 66, in image_detect
+    pred = non_max_suppression(pred, self.conf_thres, self.iou_thres, None, False, max_det=self.max_det)
+  File "/Users/wshuo/code/wshuo_workspace/TensorRT-YOLOv8/python/detect/utils/general.py", line 684, in non_max_suppression
+    nc = prediction.shape[2] - 5  # number of classes
+AttributeError: 'list' object has no attribute 'shape'
+2024-09-29 11:33:30,923 ERROR expected 6 or 7 values but got 4
+Traceback (most recent call last):
+  File "/Users/wshuo/code/wshuo_workspace/TensorRT-YOLOv8/python/detect/yolov8_test.py", line 123, in detect
+    detect_res = yolov8.image_detect(img)  # lists [[x,y,x,y,score,classes]]
+  File "/Users/wshuo/anaconda3/envs/yolov8/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/Users/wshuo/code/wshuo_workspace/TensorRT-YOLOv8/python/detect/yolov8_test.py", line 70, in image_detect
+    det[:, :4] = scale_coords(im.shape[2:], det[:, :4], image.shape).round()
+  File "/Users/wshuo/anaconda3/envs/yolov8/lib/python3.10/site-packages/ultralytics/engine/results.py", line 288, in __getitem__
+    return self._apply("__getitem__", idx)
+  File "/Users/wshuo/anaconda3/envs/yolov8/lib/python3.10/site-packages/ultralytics/engine/results.py", line 360, in _apply
+    setattr(r, k, getattr(v, fn)(*args, **kwargs))
+  File "/Users/wshuo/anaconda3/envs/yolov8/lib/python3.10/site-packages/ultralytics/engine/results.py", line 184, in __getitem__
+    return self.__class__(self.data[idx], self.orig_shape)
+  File "/Users/wshuo/anaconda3/envs/yolov8/lib/python3.10/site-packages/ultralytics/engine/results.py", line 1006, in __init__
+    assert n in {6, 7}, f"expected 6 or 7 values but got {n}"  # xyxy, track_id, conf, cls
+AssertionError: expected 6 or 7 values but got 4

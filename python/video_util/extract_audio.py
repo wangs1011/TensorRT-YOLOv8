@@ -4,16 +4,13 @@
 
 from moviepy.editor import VideoFileClip
 
-
-
-video_path = '/Users/wshuo/Music/武林外传音频/武林外传01：郭女侠怒砸同福店，佟掌柜妙点迷路人.rmvb'
-mp3_path = '/Users/wshuo/Music/武林外传音频/001.mp3'
+video_path = '/Users/wshuo/Music/武林外传'
+mp3_path = '/Users/wshuo/Music/武林外传音频/'
 
 '''
 @Project ：视频转音频 
 @File    ：movie2mp3_.py
 @IDE     ：PyCharm 
-@Author  ：一晌小贪欢（278865463@qq.com）
 @Date    ：2024/2/29 13:20 
 '''
 
@@ -21,7 +18,7 @@ import os
 from ffmpy3 import FFmpeg
 
 # filepath：待处理视频的文件路径
-filepath = "/Users/wshuo/Music/武林外传"
+filepath = "/Users/wshuo/Music/武林"
 filename = os.listdir(filepath)
 
 print("待处理的视频文件:")
@@ -39,11 +36,11 @@ print(exit_filename)
 for i in range(len(filename)):
     # 改文件的后缀名
     changefile = filepath + "/" + filename[i]
-    change_postfix_name =(filename[i].replace('wmv', 'mp3')
-                          .replace('flv', 'mp3')
-                          .replace('rmvb', 'mp3')
-
-                          ) # 另外的视频格式请自行添加
+    change_postfix_name = (filename[i].replace('wmv', 'mp3')
+                           .replace('flv', 'mp3')
+                           .replace('rmvb', 'mp3')
+                           .replace('mkv', 'mp3')
+                           )  # 另外的视频格式请自行添加
 
     outputfile = output_dir + "/" + change_postfix_name
     if change_postfix_name in exit_filename:
@@ -56,4 +53,3 @@ for i in range(len(filename)):
     fpg.run()
 
 print("\n任务完成！！！")
-
