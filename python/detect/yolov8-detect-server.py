@@ -124,7 +124,7 @@ def detect():
     #  日志记录
     alarm_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
     sp = alarm_time.split(' ')
-    log_dir = './logs/yolov8_test/'
+    log_dir = 'logs/yolov8_test/'
     log_path = os.path.join(log_dir, "info", sp[0])
     if not os.path.exists(log_path):
         os.makedirs(log_path, exist_ok=True)
@@ -154,7 +154,7 @@ def detect():
     except Exception as e:
         print(e)
 
-    print(detect_result)
+    # print(detect_result)
     return json.dumps(detect_result)
 
 

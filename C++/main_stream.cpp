@@ -52,7 +52,7 @@ int run(char* videoPath){
         if ( !cap.read(img) ) break;
         num_frames++;
         if (img.empty()) break;
-        if (num_frames % 20 == 0){
+        if (num_frames % 1 == 0){
             cout << "Processing frame " << num_frames << endl;
 
 
@@ -65,10 +65,10 @@ int run(char* videoPath){
             int cost = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
 
             // draw result on image
-            YoloDetector::draw_image(img, res);
+//            YoloDetector::draw_image(img, res);
 
             stringstream str;
-            str << "../image_out/" << num_frames << ".jpg";        /*图片存储位置*/
+            str << "../image_out/" << inputVideoPath.substr(1, 4) << "_" << num_frames << ".jpg";        /*图片存储位置*/
 
             cout << str.str( ) << endl;
             imwrite( str.str( ), img );
