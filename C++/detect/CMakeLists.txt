@@ -39,12 +39,25 @@ find_package(CURL REQUIRED)
 message(STATUS "Find CURL include at ${CURL_INCLUDE_DIRS}")
 message(STATUS "Find CURL libraries: ${CURL_LIBRARIES}")
 
+# 添加CMake模块路径
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+
+# 查找hiredis
+find_package(hiredis REQUIRED)
+
+# 如果找到了hiredis，则添加它的头文件和库
+if(HIREDIS_FOUND)
+    message(STATUS "Find hiredis include at ${HIREDIS_INCLUDE_DIRS}")
+    message(STATUS "Find hiredis libraries: ${HIREDIS_LIBRARIES}")
+else()
+    message(FATAL_ERROR "hiredis not found")
+endif()
 
 # ============ yolo infer shared lib ============
 include_directories(${PROJECT_SOURCE_DIR}/include ${CUDA_INCLUDE_DIRS} ${TENSORRT_INCLUDE_DIR} ${OpenCV_INCLUDE_DIRS} ${CURL_INCLUDE_DIRS} ${HIREDIS_INCLUDE_DIRS})
 file(GLOB_RECURSE SRCS ${PROJECT_SOURCE_DIR}/src/*.cpp ${PROJECT_SOURCE_DIR}/src/*.cu)
 cuda_add_library(yolo_infer SHARED ${SRCS})
-target_link_libraries(yolo_infer ${OpenCV_LIBRARIES} ${CUDA_LIBRARIES} ${TENSORRT_LIBRARY} ${CURL_LIBRARIES} ${HIREDIS_LIBRARIES})
+target_link_libraries(yolo_infer ${OpenCV_LIBRARIES} ${CUDA_LIBRARIES} ${TENSORRT_LIBRARY} ${CURL_LIBRARIES} ${HIREDIS_LIBRARIES} )
 
 # ======== main execute file ========
 add_executable(main ${PROJECT_SOURCE_DIR}/main.cpp)
